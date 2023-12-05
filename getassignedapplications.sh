@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set your Okta API token
-OKTA_API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
-OKTA_ORG="apperio"
+OKTA_API_TOKEN=$(security find-generic-password -a "profileName" -s "secretName" -w)
+OKTA_ORG="orgName"
 
 # Fetch list of applications
 function get_applications() {
