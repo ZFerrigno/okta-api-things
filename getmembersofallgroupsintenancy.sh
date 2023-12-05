@@ -2,7 +2,7 @@
 
 # IMPORTANT, you need to add your Okta superadmin API token to the keychain using "security add-generic-password -a "accountname" -s "give-it-a-name" -w "API_TOKEN"
 # Then reference it in the line below
-API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
+API_TOKEN=$(security find-generic-password -a "profileName" -s "secretName" -w)
 
 # Fetch group IDs and names
 group_info=$(curl -s -X GET "https://apperio.okta.com/api/v1/groups?limit=200" -H "Authorization: SSWS ${API_TOKEN}")
