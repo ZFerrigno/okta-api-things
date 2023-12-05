@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Set your Okta API token
-OKTA_API_TOKEN=$(security find-generic-password -a "profileName" -s "secretName" -w)
-OKTA_ORG="orgName"
+OKTA_API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
+OKTA_ORG="apperio"
 
+output="../results/usersassignedtoapplications.txt"
 # Fetch list of applications
 function get_applications() {
   curl -s -X GET \
@@ -27,6 +28,7 @@ function get_users_for_app() {
 applications=$(get_applications)
 
 # Loop through each application and fetch users
+{
 for row in $(echo "${applications}" | jq -r '.[] | @base64'); do
   unset users
   _jq() {
@@ -45,4 +47,6 @@ for row in $(echo "${applications}" | jq -r '.[] | @base64'); do
   echo "Users:"
   echo "${users}" | jq -r '.[] | "\(.id) \(.credentials.userName)"'
   echo "-------------------"
+
 done
+} > "$output"
