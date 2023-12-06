@@ -1,52 +1,20 @@
 #!/bin/bash
 
 # Set your Okta API token
-OKTA_API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
-OKTA_ORG="apperio"
+OKTA_API_TOKEN=$(security find-generic-password -a "" -s "okta-api" -w)
+OKTA_ORG=""
+output="userAppAssignments.txt"
+app_details=$(curl -s -X GET "https://$OKTA_ORG.okta.com/api/v1/apps?limit=200" -H "Authorization: SSWS ${OKTA_API_TOKEN}" | jq -r '.[] | "\(.id) \(.label)"')
 
-output="../results/usersassignedtoapplications.txt"
-# Fetch list of applications
-function get_applications() {
-  curl -s -X GET \
-    -H "Accept: application/json" \
-    -H "Content-Type: application/json" \
-    -H "Authorization: SSWS $OKTA_API_TOKEN" \
-    "https://$OKTA_ORG.okta.com/api/v1/apps"
-}
+echo "Gathering the facts..."
+# Loop through each app_id and fetch users, then append to output file
+while read -r app_info; do
+    app_id=$(echo "$app_info" | awk '{print $1}')
+    app_label=$(echo "$app_info" | awk '{$1=""; print $0}')
+    echo "Gathering member list for $app_label"
+    echo "Application ID: $app_id - Label: $app_label" >> "$output"
+    curl -s -X GET "https://$OKTA_ORG.okta.com/api/v1/apps/$app_id/users" -H "Authorization: SSWS ${OKTA_API_TOKEN}" | jq -r '.[].credentials.userName' >> "$output"
+    echo "" >> "$output" # Add a newline for separation
 
-# Fetch users assigned to a specific application
-function get_users_for_app() {
-  app_id="$1"
-  curl -s -X GET \
-    -H "Accept: application/json" \
-    -H "Content-Type: application/json" \
-    -H "Authorization: SSWS $OKTA_API_TOKEN" \
-    "https://$OKTA_ORG.okta.com/api/v1/apps/$app_id/users"
-}
-
-# Get list of applications
-applications=$(get_applications)
-
-# Loop through each application and fetch users
-{
-for row in $(echo "${applications}" | jq -r '.[] | @base64'); do
-  unset users
-  _jq() {
-    echo ${row} | base64 --decode | jq -r ${1}
-  }
-
-  app_id=$(_jq '.id')
-  app_name=$(_jq '.name')
-
-  echo "Application: ${app_name}"
-
-  # Get users for this application
-  users=$(get_users_for_app $app_id)
-
-  # Print users assigned to the application
-  echo "Users:"
-  echo "${users}" | jq -r '.[] | "\(.id) \(.credentials.userName)"'
-  echo "-------------------"
-
-done
-} > "$output"
+done <<< "$app_details"
+echo "Finished. Check $output"
