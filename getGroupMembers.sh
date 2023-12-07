@@ -1,25 +1,36 @@
 #!/bin/bash
 
-API_TOKEN=$(security find-generic-password -a "" -s "okta-api" -w)
-ORG=""
+# collects membership for all groups in the organisation
+
+API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
+ORG="apperio"
 output="groupMembers.txt"
 
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+MAG='\033[0;35m'
+RED='\033[0;31m'
+
+# gets all groups
 group_info=$(curl -s -X GET "https://$ORG.okta.com/api/v1/groups?limit=200" -H "Authorization: SSWS ${API_TOKEN}")
 
+# takes above group info, passes through jq filtering for profile.name and id. id used for for the script, profile.name used for humans to read
 echo "$group_info" | jq -r '.[] | "\(.id) \(.profile.name)"' | while read -r id name; do
-    echo "Group members captured for $name" # Print group name to console
+    echo "${MAG}Group members captured for $name${NC}"
 
-    # Append group details to the file
+    # append group details to the file
     {
-        echo "Group ID: $id"
-        echo "Group Name: $name"
+        echo "${GREEN}Group ID: $id${NC}"
+        echo "${GREEN}Group Name: $name{$NC}"
 
-        # Fetch users for the current group
+        # fetch users for the current group
         users=$(curl -s -X GET "https://$ORG.okta.com/api/v1/groups/${id}/users" -H "Authorization: SSWS ${API_TOKEN}" | jq -r '.[].profile.login')
 
-        # Output the associated users
-        echo "Members: "
-        echo "$users"
+        # output the associated users
+        echo "${GREEN}Members:${NC} "
+        echo "${CYAN}$users${NC}"
         echo "-----------------------------"
-    } >> "$output" # Append output to file
+    } >> "$output" # append output to file
 done
+echo "${GREEN}Finished. Check $output"
