@@ -4,8 +4,8 @@ getting me tentacles all wet
 
 ## What does this do?
 
-The scripts here are simple bash scripts, designed to talk to your Okta tenancy and pull useful information that can be used as general
-backups and disaster/ransomware recovery. My personal plan for use is to run these as cron tasks in a VM on a daily schedule, and store the backup files outside normal corporate infrastructure.
+The scripts here are super simple bash scripts, designed to talk to your Okta tenancy and pull useful information that can be used as general
+backups and disaster/ransomware recovery. My personal plan for use is to run these as scheduled tasks in a VM on a daily schedule, and store the backup files outside normal corporate infrastructure.
 
 ## How to use
 
