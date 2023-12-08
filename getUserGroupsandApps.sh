@@ -4,8 +4,8 @@
 
 
 # get api token
-API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
-ORG="apperio"
+API_TOKEN=$(security find-generic-password -a "entryName" -s "okta-api" -w)
+ORG="orgName"
 
 # colour codes because pretty means professional
 GREEN='\033[0;32m'
@@ -15,7 +15,7 @@ MAG='\033[0;35m'
 RED='\033[0;31m'
 
 
-# give email address, format as user.name@apperio.com
+# give email address, format as user.name@orgName.com
 read -p "Enter the user's email address: " USER_EMAIL
 
 # get user id

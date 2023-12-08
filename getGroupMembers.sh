@@ -2,8 +2,8 @@
 
 # collects membership for all groups in the organisation
 
-API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
-ORG="apperio"
+API_TOKEN=$(security find-generic-password -a "entryName" -s "okta-api" -w)
+ORG="orgName"
 output="groupMembers.txt"
 
 GREEN='\033[0;32m'

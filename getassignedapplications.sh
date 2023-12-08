@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # set api token
-OKTA_API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
-# set org name, obviously this is just apperio
-OKTA_ORG="apperio"
+OKTA_API_TOKEN=$(security find-generic-password -a "entryName" -s "okta-api" -w)
+# set org name, obviously this is just orgName
+OKTA_ORG="orgName"
 # file name to output results to
 output="userAppAssignments.txt"
 

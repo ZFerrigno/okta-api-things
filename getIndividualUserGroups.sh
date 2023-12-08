@@ -2,8 +2,8 @@
 
 # THIS SCRIPT SUCKS I'M NOT QUITE SURE HOW IT ENDED UP IN THIS ODD STATE, IT WORKS BUT IT DON'T WORK GOOD
 
-API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
-ORG="apperio"
+API_TOKEN=$(security find-generic-password -a "entryName" -s "okta-api" -w)
+ORG="orgName"
 output="groupMembers.txt"
 
 read -p "Enter the user's name or ID: " user_input
