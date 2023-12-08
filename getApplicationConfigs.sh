@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # okta api token
-OKTA_API_TOKEN=$(security find-generic-password -a "zachferrigno" -s "okta-api" -w)
-OKTA_ORG="apperio"
+OKTA_API_TOKEN=$(security find-generic-password -a "entryName" -s "okta-api" -w)
+OKTA_ORG="orgName"
 OUTPUT_FILE="applications_details.json"
 
 GREEN='\033[0;32m'
